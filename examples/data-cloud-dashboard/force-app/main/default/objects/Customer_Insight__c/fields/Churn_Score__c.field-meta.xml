@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Churn_Score__c</fullName>
+    <description>0-100. Bands: Low 0-39, Medium 40-64, High 65+.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>0-100. Bands: Low 0-39, Medium 40-64, High 65+.</inlineHelpText>
+    <label>Churn Score</label>
+    <precision>3</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

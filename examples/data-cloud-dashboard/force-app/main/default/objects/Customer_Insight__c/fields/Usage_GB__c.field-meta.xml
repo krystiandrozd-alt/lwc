@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Usage_GB__c</fullName>
+    <inlineHelpText>Monthly data use in GB, oldest first, comma-separated (up to 12). Example: 41,44,39,46,43,45,52,58,44,33,29,27</inlineHelpText>
+    <label>Data Usage 12 Months (GB)</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

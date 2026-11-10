@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>The Account whose page shows these values.</inlineHelpText>
+    <label>Account</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Customer Insights (Demo)</relationshipLabel>
+    <relationshipName>Customer_Insights</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

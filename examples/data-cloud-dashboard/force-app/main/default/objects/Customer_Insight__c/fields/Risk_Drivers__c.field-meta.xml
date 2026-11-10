@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Risk_Drivers__c</fullName>
+    <inlineHelpText>One driver per line: Label | points. Example: Contract ends within 60 days | 15. If Churn Score is blank, the score is the sum of points.</inlineHelpText>
+    <label>Risk Drivers</label>
+    <length>4000</length>
+    <type>LongTextArea</type>
+    <visibleLines>6</visibleLines>
+</CustomField>

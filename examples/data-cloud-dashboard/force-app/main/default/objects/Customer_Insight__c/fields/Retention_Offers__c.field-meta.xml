@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retention_Offers__c</fullName>
+    <inlineHelpText>One offer per line: Name | reason | acceptance % | cost. Example: Re-contract 24 months, 20% off | Contract ends soon | 34 | 1150. Up to 3 are shown.</inlineHelpText>
+    <label>Retention Offers</label>
+    <length>4000</length>
+    <type>LongTextArea</type>
+    <visibleLines>6</visibleLines>
+</CustomField>

@@ -55,6 +55,47 @@ Validate before a demo:
 - The date filter `CURRENT_DATE - INTERVAL '30' DAY` must run in your org's Data 360 SQL. Check it in Query Editor.
 - A record whose DMO is missing shows an error on that tile only. The rest of the dashboard still loads.
 
+## Demo widget for the Account page (no Data Cloud needed)
+
+`accountData360Widget` ("Data 360 Customer Insights (Demo)") looks like a Data 360 widget but needs **no Data Cloud and no setup**. Use it for demos in orgs where Data 360 is not configured.
+
+| Area              | Shows                                                                                                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Churn risk        | Score 0–100, band badge (Low / Medium / High), meter, 6-month change                                                                                                   |
+| KPIs              | Monthly revenue, lifetime value, lines, tenure, contract end, network score, payment score, last NPS, open cases (values outside thresholds are flagged in red with ▼) |
+| Why at risk       | Driver bars whose points add up to the score                                                                                                                           |
+| Usage             | Data-use sparkline (SVG, no chart library)                                                                                                                             |
+| Retention actions | Up to 3 offers with acceptance %, expected value saved and a "Present offer" button (shows a toast only)                                                               |
+
+Where the values come from, per Account:
+
+1. **A Customer Insight (Demo) record** (`Customer_Insight__c`) linked to the Account. Each filled field is shown as typed.
+2. **Generated values** for every blank field, or when the Account has no record. They are derived from the record ID, so the same Account always shows the same numbers. The _Risk scenario_ property (auto / high / medium / low) forces a band.
+
+Text formats on the record:
+
+| Field                     | Format                                                                                   | Example                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Risk Drivers              | one per line, `Label \| points`                                                          | `Contract ends within 60 days \| 15`                                 |
+| Retention Offers          | one per line, `Name \| reason \| acceptance % \| cost`; first 3 shown in the order typed | `Re-contract 24 months, 20% off \| Contract ends soon \| 34 \| 1150` |
+| Data Usage 12 Months (GB) | comma-separated, oldest first                                                            | `41,44,39,46,43,45,52,58,44,33,29,27`                                |
+
+If _Churn Score_ is blank, the score is the sum of the driver points.
+
+Set it up:
+
+```bash
+sf project deploy start --source-dir force-app/main/default/lwc/accountData360Widget --source-dir force-app/main/default/objects/Customer_Insight__c --source-dir force-app/main/default/classes/AccountData360WidgetController.cls --source-dir force-app/main/default/classes/AccountData360WidgetControllerTest.cls --source-dir force-app/main/default/tabs --source-dir force-app/main/default/permissionsets/Data_360_Demo_Widget.permissionset-meta.xml --target-org <alias>
+```
+
+```bash
+sf org assign permset --name Data_360_Demo_Widget --target-org <alias>
+```
+
+Then open any Account, **Edit Page**, drag **Data 360 Customer Insights (Demo)** into the right-hand column, save and activate. To control the numbers, open the **Customer Insights (Demo)** tab, create a record and pick the Account.
+
+The widget always shows a "Demo data" badge unless _Hide demo badge_ is ticked. Keep it on in client demos so nobody mistakes the numbers for real data.
+
 ## Component properties (App Builder)
 
 | Property                 | Default            | Notes                                                                                                       |
