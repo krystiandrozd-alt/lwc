@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>68.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Data 360 Dashboard</masterLabel>
+    <description>KPI tiles and tables from Data 360 SQL plus a segment overview.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__HomePage,lightning__RecordPage">
+            <property name="cardTitle" type="String" default="Data 360 Dashboard" label="Title" />
+            <property name="spaceName" type="String" default="default" label="Data space" description="Data 360 data space API name." />
+            <property name="segmentPageSize" type="Integer" default="50" min="1" max="200" label="Segments to load" />
+            <property name="hideSegments" type="Boolean" default="false" label="Hide segments section" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

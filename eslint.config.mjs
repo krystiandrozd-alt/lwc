@@ -29,7 +29,11 @@ export default tseslint.config(
 
     gitignore(),
     {
-        ignores: ['packages/**/fixtures/**/*.js'],
+        ignores: [
+            'packages/**/fixtures/**/*.js',
+            // Standalone SFDX sample project with its own tooling (sfdx-lwc-jest).
+            'examples/**',
+        ],
     },
     js.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
