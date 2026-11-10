@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Data GB per Line (30 days)</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Display_Type__c</field>
+        <value xsi:type="xsd:string">Metric</value>
+    </values>
+    <values>
+        <field>Query__c</field>
+        <value xsi:type="xsd:string">SELECT ROUND(SUM(VolumeMB__c) / 1024.0 / NULLIF(COUNT(DISTINCT SubscriberId__c), 0), 2) AS gb_per_line FROM demo_UsageDaily__dlm WHERE ServiceType__c = 'DATA' AND UsageDate__c &gt;= CURRENT_DATE - INTERVAL '30' DAY</value>
+    </values>
+    <values>
+        <field>Sort_Order__c</field>
+        <value xsi:type="xsd:double">230</value>
+    </values>
+</CustomMetadata>

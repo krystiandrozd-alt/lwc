@@ -35,6 +35,26 @@ Add records to **DC Dashboard KPI** (Setup → Custom Metadata Types). Two sampl
 
 A **Metric** tile shows the first column of the first row. A **Table** renders all returned columns.
 
+### MVNO KPI pack (inactive by default)
+
+Seven extra records implement the D1 "Executive Subscriber Cockpit" from the _Data 360 Reference Configuration for a Small-to-Medium Mobile Operator / MVNO_. They ship with `Active__c = false`. Activate them once the DMOs and the insight they query exist in the org.
+
+| Record                       | Type   | Source object                                  | Status of object/field names                             |
+| ---------------------------- | ------ | ---------------------------------------------- | -------------------------------------------------------- |
+| `MVNO_Active_Prepaid_Lines`  | Metric | `demo_MobileSubscriber__dlm`                   | Custom DMO from the reference config (inference)         |
+| `MVNO_Active_Postpaid_Lines` | Metric | `demo_MobileSubscriber__dlm`                   | Custom DMO (inference)                                   |
+| `MVNO_Gross_Adds_30d`        | Metric | `demo_MobileSubscriber__dlm.ActivationDate__c` | Custom DMO; field name is inference                      |
+| `MVNO_Data_GB_Per_Line_30d`  | Metric | `demo_UsageDaily__dlm`                         | Custom DMO (inference)                                   |
+| `MVNO_Dropped_Call_Rate_30d` | Metric | `ssot__NetworkUsage__dlm`                      | Standard DMO, fields confirmed in the DMO reference      |
+| `MVNO_Churn_Risk_Bands`      | Table  | `CI_ChurnRisk__cio.churn_band__c`              | Calculated insight from the reference config (inference) |
+| `MVNO_Lines_By_Payment_Type` | Table  | `demo_MobileSubscriber__dlm`                   | Custom DMO (inference)                                   |
+
+Validate before a demo:
+
+- Field values `ACTIVE`, `PRE`, `POST` and `DATA` must match what your ingestion transforms write.
+- The date filter `CURRENT_DATE - INTERVAL '30' DAY` must run in your org's Data 360 SQL. Check it in Query Editor.
+- A record whose DMO is missing shows an error on that tile only. The rest of the dashboard still loads.
+
 ## Component properties (App Builder)
 
 | Property                 | Default            | Notes                                                                                                       |
