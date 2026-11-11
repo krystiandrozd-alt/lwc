@@ -1,0 +1,57 @@
+source_object,source_field,target_dmo,target_field,dmo_type,note
+MobileLine,line_id,ssot__Asset__dlm,ssot__Id__c,standard,primary key
+MobileLine,account_id,ssot__Asset__dlm,ssot__BillToAccountId__c,standard,payer account (Asset DMO has no AccountId field); relationship to ssot__Account__dlm
+MobileLine,msisdn,ssot__Asset__dlm,ssot__Name__c,standard,display name = MSISDN
+MobileLine,msisdn,ssot__Asset__dlm,ssot__UniqueIdentifier__c,standard,MSISDN as unique identifier (semantic choice; inference)
+MobileLine,iccid,ssot__Asset__dlm,ssot__SerialNumber__c,standard,SIM serial (ICCID)
+MobileLine,plan_code,ssot__Asset__dlm,ssot__ProductCodeText__c,standard,
+MobileLine,plan_name,ssot__Asset__dlm,ssot__ProductDescription__c,standard,
+MobileLine,product_family,ssot__Asset__dlm,ssot__ProductFamilyName__c,standard,
+MobileLine,line_status,ssot__Asset__dlm,ssot__AssetStatus__c,standard,
+MobileLine,activation_date,ssot__Asset__dlm,ssot__ActivatedDateTime__c,standard,
+MobileLine,contract_end_date,ssot__Asset__dlm,ssot__LifecycleEndDate__c,standard,commitment end
+MobileLine,mrc_aed,ssot__Asset__dlm,ssot__CurrentMRRAmount__c,standard,
+MobileLine,data_allowance_gb,ssot__Asset__dlm,DataAllowanceGb__c,custom field on standard DMO,[VALIDATE] custom field on standard DMO; fallback: custom DMO du_MobileLine
+MobileLine,device_model,ssot__Asset__dlm,DeviceModel__c,custom field on standard DMO,[VALIDATE] as above
+MobileLine,is_5g_device,ssot__Asset__dlm,Is5gDevice__c,custom field on standard DMO,[VALIDATE] as above
+MobileLine,emirate,ssot__Asset__dlm,Emirate__c,custom field on standard DMO,[VALIDATE] as above
+NetworkKpiDaily,kpi_id,ssot__NetworkUsage__dlm,ssot__Id__c,standard,primary key
+NetworkKpiDaily,account_id,ssot__NetworkUsage__dlm,ssot__AccountId__c,standard,
+NetworkKpiDaily,line_id,ssot__NetworkUsage__dlm,ssot__AssetId__c,standard,relationship to ssot__Asset__dlm
+NetworkKpiDaily,period_start,ssot__NetworkUsage__dlm,ssot__NetworkUsageStartDateTime__c,standard,
+NetworkKpiDaily,period_end,ssot__NetworkUsage__dlm,ssot__NetworkUsageEndDateTime__c,standard,
+NetworkKpiDaily,call_drop_rate_pct,ssot__NetworkUsage__dlm,ssot__AverageCallDropRate__c,standard,
+NetworkKpiDaily,call_setup_success_pct,ssot__NetworkUsage__dlm,ssot__AverageCallSetupSuccessRate__c,standard,
+NetworkKpiDaily,latency_ms,ssot__NetworkUsage__dlm,ssot__AverageLatencyNumber__c,standard,
+NetworkKpiDaily,jitter_ms,ssot__NetworkUsage__dlm,ssot__AverageJitterNumber__c,standard,
+NetworkKpiDaily,packet_loss_pct,ssot__NetworkUsage__dlm,ssot__AveragePacketLossNumber__c,standard,
+NetworkKpiDaily,dl_throughput_mbps,ssot__NetworkUsage__dlm,ssot__AverageThroughputDownloadNumber__c,standard,unit: Mbps (document in demo)
+NetworkKpiDaily,ul_throughput_mbps,ssot__NetworkUsage__dlm,ssot__AverageThroughputUploadNumber__c,standard,
+NetworkKpiDaily,availability_pct,ssot__NetworkUsage__dlm,ssot__AverageAvailabilityNumber__c,standard,
+NetworkKpiDaily,mos_score,ssot__NetworkUsage__dlm,ssot__AverageMeanOpinionScoreNumber__c,standard,
+NetworkKpiDaily,data_volume_mb,ssot__NetworkUsage__dlm,ssot__UsageVolumeNumber__c,standard,
+NetworkKpiDaily,site_name,ssot__NetworkUsage__dlm,ssot__NetworkLocationName__c,standard,
+NetworkKpiDaily,activity_type,ssot__NetworkUsage__dlm,ssot__NetworkActivityType__c,standard,
+LineSlo,slo_id,ssot__AssetServiceLevelObjective__dlm,ssot__Id__c,standard,primary key
+LineSlo,line_id,ssot__AssetServiceLevelObjective__dlm,ssot__AssetId__c,standard,relationship to ssot__Asset__dlm
+LineSlo,slo_name,ssot__AssetServiceLevelObjective__dlm,ssot__Name__c,standard,
+LineSlo,measure,ssot__AssetServiceLevelObjective__dlm,ssot__AssetMeasure__c,standard,
+LineSlo,comparator,ssot__AssetServiceLevelObjective__dlm,ssot__ConformanceComparatorText__c,standard,
+LineSlo,threshold_target,ssot__AssetServiceLevelObjective__dlm,ssot__ThresholdTargetNumber__c,standard,
+LineSlo,period_days,ssot__AssetServiceLevelObjective__dlm,ssot__ConformancePeriodNumber__c,standard,
+LineSlo,slo_status,ssot__AssetServiceLevelObjective__dlm,ssot__AssetServiceLevelObjectiveStatus__c,standard,
+LineSlo,valid_from,ssot__AssetServiceLevelObjective__dlm,ssot__ValidityStartDate__c,standard,
+LineSlo,valid_to,ssot__AssetServiceLevelObjective__dlm,ssot__ValidityEndDate__c,standard,
+PartyId,party_id_key,ssot__PartyIdentification__dlm,ssot__Id__c,standard,primary key
+PartyId,account_id,ssot__PartyIdentification__dlm,ssot__PartyId__c,standard,party = Account
+PartyId,id_type,ssot__PartyIdentification__dlm,ssot__PartyIdentificationTypeId__c,standard,TRADE_LICENSE / TRN (constants)
+PartyId,id_type,ssot__PartyIdentification__dlm,ssot__Name__c,standard,same constant; identity rules need consistent Type and Name
+PartyId,id_number,ssot__PartyIdentification__dlm,ssot__Identificationnumber__c,standard,API name spelled as in Salesforce docs
+PartyId,issued_by,ssot__PartyIdentification__dlm,ssot__IssuedByAuthority__c,standard,
+PartyId,issued_date,ssot__PartyIdentification__dlm,ssot__IssuedDate__c,standard,
+PartyId,expiry_date,ssot__PartyIdentification__dlm,ssot__ExpiryDate__c,standard,
+UsageDaily,*,du_UsageDaily__dlm,same names,custom DMO,no standard daily-usage DMO; relationship account_id -> ssot__Account__dlm.ssot__Id__c and line_id -> ssot__Asset__dlm.ssot__Id__c
+BillSummary,*,du_BillSummary__dlm,same names,custom DMO,standard Invoice DMO (std__ family) not verified; switch when confirmed in org
+TroubleTicket,*,du_TroubleTicket__dlm,same names,custom DMO,optional: map to ssot__Case__dlm instead once field names are confirmed in org
+DigitalEngagement,*,du_DigitalEngagement__dlm,same names,custom DMO,optional: standard Website/App engagement DMOs
+AccountRiskSnapshot,*,du_AccountRiskSnapshot__dlm,same names,custom DMO,score as produced by a scoring job; relationship account_id -> ssot__Account__dlm.ssot__Id__c

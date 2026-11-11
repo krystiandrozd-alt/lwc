@@ -1,0 +1,162 @@
+openapi: 3.0.3
+info:
+    title: du SMB Mobile - synthetic telco signals (DEMO)
+    version: 1.0.0
+    description: >
+        Ingestion API schema for the du SMB Mobile demo. All records are generated
+        synthetic data (no migration). One object per data stream. Field names follow
+        the Data 360 Ingestion API rules: flat objects, max 39 characters, a-z A-Z 0-9 _ -,
+        no double underscore. TM Forum reference per object in the description.
+components:
+    schemas:
+        MobileLine:
+            description: TMF637 Product Inventory / TMF639 Resource. One row per mobile line (MSISDN).
+            type: object
+            properties:
+                line_id: { type: string }
+                account_id: { type: string }
+                msisdn: { type: string }
+                iccid: { type: string }
+                plan_code: { type: string }
+                plan_name: { type: string }
+                product_family: { type: string }
+                line_status: { type: string }
+                activation_date: { type: string, format: date }
+                contract_end_date: { type: string, format: date }
+                mrc_aed: { type: number }
+                data_allowance_gb: { type: number }
+                device_model: { type: string }
+                is_5g_device: { type: boolean }
+                user_name: { type: string }
+                emirate: { type: string }
+                last_modified: { type: string, format: date-time }
+        UsageDaily:
+            description: TMF635 Usage. Daily aggregate per line and service type (raw CDRs stay in mediation).
+            type: object
+            properties:
+                usage_id: { type: string }
+                line_id: { type: string }
+                account_id: { type: string }
+                usage_date: { type: string, format: date }
+                service_type: { type: string }
+                volume_mb: { type: number }
+                duration_min: { type: number }
+                event_count: { type: number }
+                rated_amount_aed: { type: number }
+                in_bundle: { type: boolean }
+                last_modified: { type: string, format: date-time }
+        NetworkKpiDaily:
+            description: Per-line daily network experience. Maps to the standard Network Usage DMO (Communications).
+            type: object
+            properties:
+                kpi_id: { type: string }
+                line_id: { type: string }
+                account_id: { type: string }
+                period_start: { type: string, format: date-time }
+                period_end: { type: string, format: date-time }
+                call_drop_rate_pct: { type: number }
+                call_setup_success_pct: { type: number }
+                latency_ms: { type: number }
+                jitter_ms: { type: number }
+                packet_loss_pct: { type: number }
+                dl_throughput_mbps: { type: number }
+                ul_throughput_mbps: { type: number }
+                availability_pct: { type: number }
+                mos_score: { type: number }
+                data_volume_mb: { type: number }
+                site_name: { type: string }
+                activity_type: { type: string }
+                last_modified: { type: string, format: date-time }
+        LineSlo:
+            description: SLA objective per business line. Maps to the standard Asset Service Level Objective DMO.
+            type: object
+            properties:
+                slo_id: { type: string }
+                line_id: { type: string }
+                account_id: { type: string }
+                slo_name: { type: string }
+                measure: { type: string }
+                comparator: { type: string }
+                threshold_target: { type: number }
+                period_days: { type: number }
+                slo_status: { type: string }
+                valid_from: { type: string, format: date }
+                valid_to: { type: string, format: date }
+                last_modified: { type: string, format: date-time }
+        BillSummary:
+            description: TMF678 Customer Bill. One row per account and bill month.
+            type: object
+            properties:
+                bill_id: { type: string }
+                account_id: { type: string }
+                billing_account_no: { type: string }
+                bill_month: { type: string, format: date }
+                recurring_aed: { type: number }
+                usage_aed: { type: number }
+                one_time_aed: { type: number }
+                net_amount_aed: { type: number }
+                vat_aed: { type: number }
+                total_aed: { type: number }
+                due_date: { type: string, format: date }
+                paid_date: { type: string, format: date }
+                days_late: { type: number }
+                bill_status: { type: string }
+                is_disputed: { type: boolean }
+                last_modified: { type: string, format: date-time }
+        PartyId:
+            description: TMF632 Party identification (UAE trade licence, TRN). Maps to the standard Party Identification DMO.
+            type: object
+            properties:
+                party_id_key: { type: string }
+                account_id: { type: string }
+                id_type: { type: string }
+                id_number: { type: string }
+                issued_by: { type: string }
+                issued_date: { type: string, format: date }
+                expiry_date: { type: string, format: date }
+                last_modified: { type: string, format: date-time }
+        TroubleTicket:
+            description: TMF621 Trouble Ticket (assurance / ITSM). Kept separate from CRM Case on purpose.
+            type: object
+            properties:
+                ticket_id: { type: string }
+                account_id: { type: string }
+                line_id: { type: string }
+                opened_at: { type: string, format: date-time }
+                resolved_at: { type: string, format: date-time }
+                priority: { type: string }
+                category: { type: string }
+                within_sla: { type: boolean }
+                root_cause: { type: string }
+                last_modified: { type: string, format: date-time }
+        DigitalEngagement:
+            description: du Business app and portal events (login, view usage, compare plans, port-out FAQ).
+            type: object
+            properties:
+                event_id: { type: string }
+                account_id: { type: string }
+                line_id: { type: string }
+                event_time: { type: string, format: date-time }
+                channel: { type: string }
+                event_type: { type: string }
+                page_name: { type: string }
+                last_modified: { type: string, format: date-time }
+        AccountRiskSnapshot:
+            description: >
+                Monthly churn/next-best-offer score per account, as produced by an external or
+                AI Models scoring job. Ingested so the demo never depends on live model training.
+            type: object
+            properties:
+                snapshot_id: { type: string }
+                account_id: { type: string }
+                snapshot_date: { type: string, format: date }
+                churn_score: { type: number }
+                churn_band: { type: string }
+                top_driver_1: { type: string }
+                top_driver_2: { type: string }
+                top_driver_3: { type: string }
+                nbo_code: { type: string }
+                nbo_name: { type: string }
+                nbo_propensity_pct: { type: number }
+                clv_aed: { type: number }
+                last_modified: { type: string, format: date-time }
