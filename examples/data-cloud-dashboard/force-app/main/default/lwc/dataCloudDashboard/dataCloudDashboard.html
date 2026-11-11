@@ -1,0 +1,124 @@
+<template>
+    <lightning-card title={cardTitle} icon-name="standard:dashboard">
+        <div slot="actions" class="slds-grid slds-grid_vertical-align-center">
+            <template lwc:if={lastRefreshed}>
+                <span class="slds-text-body_small slds-text-color_weak slds-m-right_small">
+                    Updated
+                    <lightning-formatted-date-time
+                        value={lastRefreshed}
+                        hour="2-digit"
+                        minute="2-digit"
+                    ></lightning-formatted-date-time>
+                </span>
+            </template>
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh"
+                title="Refresh"
+                onclick={handleRefresh}
+                disabled={isRefreshing}
+                data-id="refresh"
+            ></lightning-button-icon>
+        </div>
+
+        <div class="slds-p-horizontal_medium">
+            <!-- KPI definitions -->
+            <template lwc:if={loadingDefinitions}>
+                <div class="spinner-holder"><lightning-spinner alternative-text="Loading KPIs" size="small"></lightning-spinner></div>
+            </template>
+            <template lwc:if={definitionsError}>
+                <div class="slds-text-color_error slds-m-bottom_small" data-id="definitions-error">{definitionsError}</div>
+            </template>
+            <template lwc:if={noKpis}>
+                <p class="slds-text-color_weak slds-m-bottom_small" data-id="no-kpis">
+                    No active KPIs. Add records to the DC Dashboard KPI custom metadata type.
+                </p>
+            </template>
+
+            <!-- Metric tiles -->
+            <template lwc:if={hasMetrics}>
+                <div class="tiles slds-m-bottom_medium">
+                    <template for:each={metricKpis} for:item="kpi">
+                        <article key={kpi.name} class="tile" data-id="metric">
+                            <p class="tile-label slds-truncate" title={kpi.label}>{kpi.label}</p>
+                            <template lwc:if={kpi.loading}>
+                                <lightning-spinner alternative-text="Loading" size="x-small"></lightning-spinner>
+                            </template>
+                            <template lwc:elseif={kpi.error}>
+                                <p class="slds-text-color_error slds-text-body_small">{kpi.error}</p>
+                            </template>
+                            <template lwc:elseif={kpi.isNumeric}>
+                                <p class="tile-value"><lightning-formatted-number value={kpi.value}></lightning-formatted-number></p>
+                            </template>
+                            <template lwc:else>
+                                <p class="tile-value slds-truncate">{kpi.value}</p>
+                            </template>
+                        </article>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Table KPIs -->
+            <template lwc:if={hasTables}>
+                <template for:each={tableKpis} for:item="kpi">
+                    <section key={kpi.name} class="slds-m-bottom_medium" data-id="table">
+                        <h3 class="slds-text-heading_small slds-m-bottom_x-small">{kpi.label}</h3>
+                        <template lwc:if={kpi.loading}>
+                            <div class="spinner-holder"><lightning-spinner alternative-text="Loading" size="small"></lightning-spinner></div>
+                        </template>
+                        <template lwc:elseif={kpi.error}>
+                            <p class="slds-text-color_error">{kpi.error}</p>
+                        </template>
+                        <template lwc:else>
+                            <div class="table-wrap">
+                                <lightning-datatable
+                                    key-field="_key"
+                                    data={kpi.rows}
+                                    columns={kpi.columns}
+                                    hide-checkbox-column
+                                ></lightning-datatable>
+                            </div>
+                            <template lwc:if={kpi.truncated}>
+                                <p class="slds-text-body_small slds-text-color_weak">Showing the first {kpi.rowCount} rows.</p>
+                            </template>
+                        </template>
+                    </section>
+                </template>
+            </template>
+
+            <!-- Segments -->
+            <template lwc:if={showSegments}>
+                <section data-id="segments">
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">Segments &amp; publishing</h3>
+                    <template lwc:if={loadingSegments}>
+                        <div class="spinner-holder"><lightning-spinner alternative-text="Loading segments" size="small"></lightning-spinner></div>
+                    </template>
+                    <template lwc:elseif={segmentsError}>
+                        <p class="slds-text-color_error" data-id="segments-error">{segmentsError}</p>
+                    </template>
+                    <template lwc:elseif={noSegments}>
+                        <p class="slds-text-color_weak">No segments in this data space.</p>
+                    </template>
+                    <template lwc:elseif={hasSegments}>
+                        <div class="tiles slds-m-bottom_small">
+                            <template for:each={segmentSummary} for:item="s">
+                                <article key={s.key} class="tile tile_compact" data-id="segment-summary">
+                                    <p class="tile-label">{s.label}</p>
+                                    <p class={s.cls}>{s.value}</p>
+                                </article>
+                            </template>
+                        </div>
+                        <div class="table-wrap">
+                            <lightning-datatable
+                                key-field="key"
+                                data={segments}
+                                columns={segmentColumns}
+                                hide-checkbox-column
+                            ></lightning-datatable>
+                        </div>
+                    </template>
+                </section>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,92 @@
+<template>
+    <lightning-card title={cardTitle} icon-name="standard:customer_360">
+        <template lwc:if={showDemoBadge}>
+            <span slot="actions" class="slds-badge slds-badge_lightest" title="Generated demo data, no Data Cloud connection">Demo data</span>
+        </template>
+
+        <div class="slds-p-horizontal_medium">
+            <!-- Churn risk -->
+            <section class="risk" aria-label="Churn risk">
+                <div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-gutters_x-small">
+                    <div class="slds-col slds-grow-none"><span class="score">{profile.score}</span></div>
+                    <div class="slds-col">
+                        <span class={bandBadgeClass} data-id="band">{bandLabel}</span>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">{scoreDelta} · churn score 0–100</p>
+                    </div>
+                </div>
+                <div class="meter" role="img" aria-label={bandLabel}><i class="meter-marker" style={scoreMarkerStyle}></i></div>
+                <div class="slds-grid slds-grid_align-spread slds-text-body_small slds-text-color_weak">
+                    <span>0 Low</span><span>40 Medium</span><span>65 High</span><span>100</span>
+                </div>
+            </section>
+
+            <!-- KPIs -->
+            <div class="kpis slds-m-top_medium">
+                <template for:each={kpis} for:item="k">
+                    <div key={k.key} class="kpi" data-id="kpi">
+                        <p class="kpi-label slds-truncate" title={k.label}>{k.label}</p>
+                        <p class={k.valueClass}>
+                            <template lwc:if={k.isCurrency}>
+                                <lightning-formatted-number value={k.value} format-style="currency" currency-code={currencyCode} maximum-fraction-digits="0"></lightning-formatted-number>
+                            </template>
+                            <template lwc:else>{k.text}</template>
+                        </p>
+                        <template lwc:if={k.warn}><p class="slds-text-body_small slds-text-color_error">{k.flag}</p></template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Drivers -->
+            <section class="slds-m-top_medium">
+                <h3 class="slds-text-heading_small slds-m-bottom_x-small">Why at risk</h3>
+                <template lwc:if={hasDrivers}>
+                    <ul class="drivers">
+                        <template for:each={drivers} for:item="d">
+                            <li key={d.key} class="driver" title={d.title} data-id="driver">
+                                <span class="driver-label">{d.label}</span>
+                                <span class="driver-track"><span class="driver-bar" style={d.barStyle}></span></span>
+                                <span class="driver-pts">{d.points}</span>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template lwc:else><p class="slds-text-color_weak">No active risk drivers.</p></template>
+            </section>
+
+            <!-- Usage -->
+            <section class="slds-m-top_medium">
+                <h3 class="slds-text-heading_small">Mobile data, last months</h3>
+                <p class="slds-text-body_small"><strong>{usageLast} GB</strong> this month · <span class={usageChangeClass}>{usageChange}</span></p>
+                <svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none" role="img" aria-label={usageAria}>
+                    <polyline points={usagePoints} fill="none" stroke-width="2" vector-effect="non-scaling-stroke" class="spark-line"></polyline>
+                </svg>
+            </section>
+
+            <!-- Offers -->
+            <section class="slds-m-top_medium slds-m-bottom_small">
+                <h3 class="slds-text-heading_small slds-m-bottom_x-small">Next best retention actions</h3>
+                <template lwc:if={hasOffers}>
+                    <template for:each={offers} for:item="o">
+                        <article key={o.key} class={o.cardClass} data-id="offer">
+                            <p class="slds-text-body_small slds-text-color_weak">#{o.rank}<template lwc:if={o.isTop}> · Recommended</template></p>
+                            <p class="slds-text-title_bold">{o.name}</p>
+                            <p class="slds-text-body_small slds-text-color_weak">{o.reason}</p>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-m-top_x-small">
+                                <span class="slds-text-body_small slds-m-right_small">Acceptance {o.propPct}%</span>
+                                <span class="prop-track"><span class="prop-bar" style={o.propStyle}></span></span>
+                            </div>
+                            <p class="slds-text-body_small slds-m-top_xx-small">
+                                Expected value saved:
+                                <lightning-formatted-number value={o.value} format-style="currency" currency-code={currencyCode} maximum-fraction-digits="0"></lightning-formatted-number>
+                            </p>
+                            <lightning-button class="slds-m-top_x-small" label="Present offer" variant={o.buttonVariant} data-name={o.name} onclick={handlePresent}></lightning-button>
+                        </article>
+                    </template>
+                </template>
+                <template lwc:else><p class="slds-text-color_weak">No retention action needed.</p></template>
+            </section>
+
+            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small" data-id="source">{sourceNote}</p>
+        </div>
+    </lightning-card>
+</template>

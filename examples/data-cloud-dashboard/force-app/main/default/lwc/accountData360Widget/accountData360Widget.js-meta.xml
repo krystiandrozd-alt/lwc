@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Data 360 Customer Insights (Demo)</masterLabel>
+    <description>Demo-only widget that mimics Data 360 insights on a record page using generated data. No Data Cloud, Apex or setup required.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="cardTitle" type="String" default="Data 360 Customer Insights" label="Title" />
+            <property name="scenario" type="String" default="auto" datasource="auto,high,medium,low" label="Risk scenario" description="auto = derived from the record ID; high/medium/low = fixed scenario for demos." />
+            <property name="currencyCode" type="String" default="AED" label="Currency code" />
+            <property name="hideDemoBadge" type="Boolean" default="false" label="Hide demo badge" />
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage,lightning__HomePage">
+            <property name="cardTitle" type="String" default="Data 360 Customer Insights" label="Title" />
+            <property name="scenario" type="String" default="high" datasource="auto,high,medium,low" label="Risk scenario" />
+            <property name="currencyCode" type="String" default="AED" label="Currency code" />
+            <property name="hideDemoBadge" type="Boolean" default="false" label="Hide demo badge" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
